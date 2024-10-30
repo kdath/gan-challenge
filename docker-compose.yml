@@ -1,0 +1,14 @@
+services:
+  mongo:
+    image: mongo
+    restart: always
+    container_name: mongo
+    expose:
+      - 27017
+    ports:
+      - 27017:27017
+
+  mongodb_seed:
+      build: mongo-seed
+      links:
+        - mongo
