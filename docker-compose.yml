@@ -7,8 +7,20 @@ services:
       - 27017
     ports:
       - 27017:27017
+    healthcheck:
+      test: echo 'db.runCommand("ping").ok' | mongosh localhost:27017/test --quiet
 
   mongodb_seed:
-      build: mongo-seed
-      links:
-        - mongo
+    build: mongo-seed
+    links:
+      - mongo
+
+  server:
+    build:
+      context: .
+    ports:
+      - 8080:8080
+    depends_on:
+        mongo:
+            condition: service_healthy
+            restart: true
