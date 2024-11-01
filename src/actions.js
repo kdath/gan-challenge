@@ -1,21 +1,32 @@
-const { City } = require('./models')
+const { Cities } = require('./models')
 
 
 const getByTag = async (req, res, next) => {
   try {
     const tag = req.query.tag;
+    const isActive = req.query.isActive;
     if (!tag) {
-      // throw
+      throw Error('Missing required parameter')
     }
 
-    const cities = await City.find({
-          tag: tag
-    })
+    let query = {
+      tags: tag
+    };
+
+    if(isActive !== undefined) {
+      query.isActive = isActive
+    }
+
+    const cities = await Cities.find(query).exec()
     res.json({
       success: true,
-      data: cities
+      cities: cities
     })
   } catch (e) {
     next(e)
   }
+}
+
+module.exports = {
+  getByTag
 }

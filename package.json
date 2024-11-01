@@ -14,7 +14,8 @@
   "dependencies": {
     "express": "4.21.0",
     "fs-extra": "11.2.0",
-    "mongoose": "4.12.3",
+    "mongodb": "4.17.2",
+    "mongoose": "5.13.22",
     "node-fetch": "2.6.0"
   }
 }

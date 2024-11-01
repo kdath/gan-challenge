@@ -10,8 +10,8 @@ const CitySchema = new Schema({
   tags: [{ type: String }]
 })
 
-const City = mongoose.model('City', CitySchema)
+const Cities = mongoose.model('Cities', CitySchema)
 
 module.exports = {
-  City
+  Cities
 }

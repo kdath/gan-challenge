@@ -1,4 +1,4 @@
 module.exports = {
-  dbUri: 'mongodb://mongo/cities',
+  dbUri: 'mongodb://mongo/citydb',
   port: 8080
 };
