@@ -1,43 +1,34 @@
 const express = require('express')// config
 const config = require('./config');
-const {getByTag} = require('./actions')
+const {authenticationMiddleware} = require('./middleware/authentication')
+const {initMongoSession} = require('./database/mongo');
+const {getByTag, getDistance, getAllCities} = require("./controllers/cityController");
+const {getAreaCities, getAreaResult} = require("./controllers/areaController");
 
 const port = config.port
-
-// db connection
-const { initMongoSession } = require('./db');
 const db = initMongoSession();
-
 const app = express();
 
+app.use(authenticationMiddleware)
 app.use((req, res, next) => {
-  const authToken = req.headers.authorization;
-  if (!authToken) {
-    res.status(401).send({
-      "message": "No authorization was provided",
-    })
-  } else {
-    // check token?
-    console.log('Authorized token')
+    console.log(`${req.method} ${req.originalUrl}`)
     next();
-  }
-})
-
-app.get('/', (req, res, next) => {
-  res.send('Hello')
 })
 
 app.get('/cities-by-tag', getByTag)
+app.get('/distance', getDistance)
+app.get('/area', getAreaCities)
+app.get('/area-result/:guid', getAreaResult)
+app.get('/all-cities', getAllCities)
 
 app.listen(port, () => {
-  console.log(`listening on http://localhost:${port}`);
+    console.log(`listening on http://localhost:${port}`);
 })
 
-
-function shutdown() {
-  db.close();
-  console.log('Goodbye')
-  process.exit()
+const shutdown = () => {
+    db.close();
+    console.log('Goodbye')
+    process.exit()
 }
 
 process.on('SIGINT', shutdown)
